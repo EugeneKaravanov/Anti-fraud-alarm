@@ -8,7 +8,7 @@ public class AlarmTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.GetComponent<ThiefMover>())
+        if(collision.TryGetComponent<ThiefMover>(out ThiefMover thiefMover))
         {
             ThiefEntered?.Invoke();
         }
@@ -16,7 +16,7 @@ public class AlarmTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<ThiefMover>())
+        if (collision.TryGetComponent<ThiefMover>(out ThiefMover thiefMover))
         {
             ThiefExited?.Invoke();
         }
