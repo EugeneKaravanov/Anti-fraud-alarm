@@ -1,16 +1,20 @@
-using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Signaling))]
 public class AlarmTrigger : MonoBehaviour
 {
-    public event Action ThiefEntered;
-    public event Action ThiefExited;
+    private Signaling _signaling;
+
+    private void Start()
+    {
+        _signaling = GetComponent<Signaling>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.TryGetComponent<ThiefMover>(out ThiefMover thiefMover))
         {
-            ThiefEntered?.Invoke();
+            _signaling.UpSignalingVolume();
         }
     }
 
@@ -18,7 +22,7 @@ public class AlarmTrigger : MonoBehaviour
     {
         if (collision.TryGetComponent<ThiefMover>(out ThiefMover thiefMover))
         {
-            ThiefExited?.Invoke();
+            _signaling.DownSignalingVolume();
         }
     }
 }

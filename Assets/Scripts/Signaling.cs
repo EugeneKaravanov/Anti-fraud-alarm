@@ -1,58 +1,36 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-[RequireComponent(typeof(AlarmTrigger))]
 public class Signaling : MonoBehaviour
 {
     private AudioSource _audioSource;
-    private AlarmTrigger _alarmTrigger;
     private float _changeVolumeSpeed = 0.05f;
+    private float _minVolume = 0f;
+    private float _maxVolume = 1f;
 
-    private void OnEnable()
+    private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
-        _alarmTrigger = GetComponent<AlarmTrigger>();
-        _alarmTrigger.ThiefEntered += ActivateSignlling;
-        _alarmTrigger.ThiefExited += SwitchOffSignlling;
     }
 
-    private void OnDisable()
-    {
-        _alarmTrigger.ThiefEntered -= ActivateSignlling;
-        _alarmTrigger.ThiefExited -= SwitchOffSignlling;
-    }
-
-    private void ActivateSignlling()
+    public void UpSignalingVolume()
     {
         StopAllCoroutines();
-        StartCoroutine(UpVolume());
+        StartCoroutine(ChangeVolume(_maxVolume));
     }
 
-    private void SwitchOffSignlling()
+    public void DownSignalingVolume()
     {
         StopAllCoroutines();
-        StartCoroutine(DownVolume());
+        StartCoroutine(ChangeVolume(_minVolume));
     }
 
-    private IEnumerator UpVolume()
+    private IEnumerator ChangeVolume(float targetVolume)
     {
-        while (_audioSource.volume < 1) 
+        while (_audioSource.volume != targetVolume) 
         {
-            _audioSource.volume += _changeVolumeSpeed * Time.deltaTime;
-            yield return null;
-        }
-
-        yield break;
-    }
-
-    private IEnumerator DownVolume()
-    {
-        while (_audioSource.volume > 0)
-        {
-            _audioSource.volume -= _changeVolumeSpeed * Time.deltaTime;
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _changeVolumeSpeed * Time.deltaTime);
             yield return null;
         }
 

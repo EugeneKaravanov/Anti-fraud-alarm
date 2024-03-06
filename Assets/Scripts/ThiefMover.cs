@@ -1,10 +1,15 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 public class ThiefMover : MonoBehaviour
 {
-    private float _speed = 3;
+    private const string Horizontal = nameof(Horizontal);
+    private const string Speed = nameof(Speed);
+
     private Animator _animator;
+    private float _speed = 3;
+    private float direction;
 
     private void Start()
     {
@@ -13,19 +18,8 @@ public class ThiefMover : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(new Vector2(_speed, 0) * Time.deltaTime);
-            _animator.SetFloat("Speed", _speed);
-        }
-        else if (Input.GetKey(KeyCode.A)) 
-        {
-            transform.Translate(new Vector2(-_speed, 0) * Time.deltaTime);
-            _animator.SetFloat("Speed", _speed);
-        }
-        else
-        {
-            _animator.SetFloat("Speed", 0);
-        }
+        direction = Input.GetAxisRaw(Horizontal);
+        transform.Translate(new Vector2(_speed * direction, 0) * Time.deltaTime);
+        _animator.SetFloat(Speed, Math.Abs(direction));
     }
 }
