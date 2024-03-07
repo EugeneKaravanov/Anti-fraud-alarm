@@ -9,7 +9,7 @@ public class ThiefMover : MonoBehaviour
 
     private Animator _animator;
     private float _speed = 3;
-    private float direction;
+    private float _direction;
 
     private void Start()
     {
@@ -18,8 +18,8 @@ public class ThiefMover : MonoBehaviour
 
     private void Update()
     {
-        direction = Input.GetAxisRaw(Horizontal);
-        transform.Translate(new Vector2(_speed * direction, 0) * Time.deltaTime);
-        _animator.SetFloat(Speed, Math.Abs(direction));
+        _direction = Input.GetAxisRaw(Horizontal);
+        transform.Translate(new Vector2(_speed * _direction, 0) * Time.deltaTime);
+        _animator.SetFloat(Speed, Math.Abs(_direction));
     }
 }
